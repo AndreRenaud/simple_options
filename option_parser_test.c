@@ -84,10 +84,23 @@ static void combined(void)
 	TEST_CHECK(flag == true);
 }
 
+static void required(void)
+{
+	struct option_entry entries[] = {
+		{"foo", 'f', NULL, OPTION_FLAG_required},
+		{NULL},
+	};
+	char *args[] = {"program"};
+	TEST_CHECK(opt_parse(1, args, entries) < 0);
+	char *new_args[] = {"program", "-f"};
+	TEST_CHECK(opt_parse(2, new_args, entries) >= 0);
+}
+
 TEST_LIST = {
 	{"simple", simple_args},
 	{"split string", split_string},
 	{"bad strings", bad_strings},
 	{"combined split & parse", combined},
+	{"required params", required},
 	{NULL, NULL},
 };

@@ -130,6 +130,11 @@ int opt_parse(int nargs, char **args, struct option_entry *options)
 			return -1;
 		}
 	}
+
+	for (const OPT_ITERATE(o, options)) {
+		if ((o->flags & OPTION_FLAG_required) && !o->present)
+			return -1;
+	}
 	return 0;
 }
 
