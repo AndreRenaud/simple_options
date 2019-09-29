@@ -29,7 +29,7 @@ static int dump_usage(const char *prog_name, struct option_entry *options)
 	return -1;
 }
 
-static bool needs_param(struct option_entry *o)
+static bool needs_param(const struct option_entry *o)
 {
 	return o->flags & (OPTION_FLAG_bool | OPTION_FLAG_int | OPTION_FLAG_string);
 }
@@ -49,9 +49,28 @@ static void set_param(struct option_entry *o, char *val)
 	}
 }
 
+static bool options_valid(const struct option_entry *options)
+{
+	if (!options)
+		return false;
+	for (const struct option_entry *o = options; o->long_opt || o->short_opt; o++) {
+		// Only one type can be used
+		if (((o->flags & OPTION_FLAG_bool) && (o->flags & OPTION_FLAG_int)) ||
+			((o->flags & OPTION_FLAG_bool) && (o->flags & OPTION_FLAG_string)) ||
+			((o->flags & OPTION_FLAG_int) && (o->flags & OPTION_FLAG_string)))
+			return false;
+		// Option flags must have an area to store the data
+		if (needs_param(o) && !o->integer)
+			return false;
+	}
+	return true;
+}
+
 int option_parse(int nargs, char **args, struct option_entry *options)
 {
-	if (!args || !nargs || !options)
+	if (!args || !nargs)
+		return -1;
+	if (!options_valid(options))
 		return -1;
 	for (struct option_entry *o = options; o->long_opt || o->short_opt; o++)
 		o->present = false;

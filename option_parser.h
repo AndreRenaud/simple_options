@@ -1,3 +1,10 @@
+/**
+ * @description Command line option parsing library
+ * Provides ability to create simple unix-style command line
+ * flags parsing functions with minimal code
+ * Only external requirements: strcmp, strcasecmp
+ */
+
 #ifndef OPTION_PARSER_H
 #define OPTION_PARSER_H
 
