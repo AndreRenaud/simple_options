@@ -10,8 +10,10 @@ int main(int argc, char *argv[])
 		{"number", 'n', "Number", OPTION_FLAG_int, .integer = &val},
 		{NULL, 0},
 	};
-	if (option_parse(argc, argv, entries) < 0)
+	if (opt_parse(argc, argv, entries) < 0) {
+		opt_parse_usage(printf, argv[0], entries);
 		return -1;
+	}
 	printf("file: %s\n", file);
 	printf("number: %lld\n", val);
 	return 0;

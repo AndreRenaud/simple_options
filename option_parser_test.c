@@ -10,13 +10,17 @@ static void simple_args(void)
 		{"file", 'f', "File to load", OPTION_FLAG_string, .string = &file},
 		{"number", 'n', "Number", OPTION_FLAG_int, .integer = &val},
 		{"bool", 'b', "Boolean", OPTION_FLAG_bool, .boolean = &flag},
+		{"missing", 'm', "Missing"},
 		{NULL, 0},
 	};
 	char *args[] = {"program", "-f", "fnord", "--number", "7", "--bool", "on"};
-	TEST_CHECK(option_parse(7, args, entries) >= 0);
+	TEST_CHECK(opt_parse(7, args, entries) >= 0);
 	TEST_CHECK(file && strcmp(file, "fnord") == 0);
 	TEST_CHECK(val == 7);
-	TEST_CHECK(entries[0].present);
+	TEST_CHECK(opt_parse_present('f', entries));
+	TEST_CHECK(!opt_parse_present('m', entries));
+	TEST_CHECK(opt_parse_present_long("bool", entries));
+	TEST_CHECK(opt_parse_present_long("file", entries));
 	TEST_CHECK(flag == true);
 }
 
@@ -25,7 +29,7 @@ static void split_string(void)
 	char input[] = " Command arg1 \targ2  arg3 missing ";
 	int argc;
 	char *argv[4];
-	argc = option_parse_split_string(input, argv, 4);
+	argc = opt_parse_split_string(input, argv, 4);
 	TEST_CHECK(argc == 4);
 	TEST_CHECK(strcmp(argv[0], "Command") == 0);
 	TEST_CHECK(strcmp(argv[1], "arg1") == 0);
@@ -39,20 +43,20 @@ static void bad_strings(void)
 	char *argv[4];
 
 	char empty[] = "";
-	argc = option_parse_split_string(empty, argv, 4);
+	argc = opt_parse_split_string(empty, argv, 4);
 	TEST_CHECK(argc == 0);
 
 	char blank[] = "     ";
-	argc = option_parse_split_string(blank, argv, 4);
+	argc = opt_parse_split_string(blank, argv, 4);
 	TEST_CHECK(argc == 0);
 
 	char middle[] = "   fnord   ";
-	argc = option_parse_split_string(middle, argv, 4);
+	argc = opt_parse_split_string(middle, argv, 4);
 	TEST_CHECK(argc == 1);
 	TEST_CHECK(strcmp(argv[0], "fnord") == 0);
 
 	char single[] = "single";
-	argc = option_parse_split_string(single, argv, 4);
+	argc = opt_parse_split_string(single, argv, 4);
 	TEST_CHECK(argc == 1);
 	TEST_CHECK(strcmp(argv[0], "single") == 0);
 }
@@ -71,9 +75,9 @@ static void combined(void)
 	char input[] = {"program -f fnord --number 7 --bool on"};
 	char *argv[10];
 	int argc;
-	argc = option_parse_split_string(input, argv, 10);
+	argc = opt_parse_split_string(input, argv, 10);
 	TEST_CHECK(argc == 7);
-	TEST_CHECK(option_parse(argc, argv, entries) >= 0);
+	TEST_CHECK(opt_parse(argc, argv, entries) >= 0);
 	TEST_CHECK(file && strcmp(file, "fnord") == 0);
 	TEST_CHECK(val == 7);
 	TEST_CHECK(entries[0].present);
