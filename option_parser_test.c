@@ -20,7 +20,47 @@ static void simple_args(void)
 	TEST_CHECK(flag == true);
 }
 
+static void split_string(void)
+{
+	char input[] = " Command arg1 \targ2  arg3 missing ";
+	int argc;
+	char *argv[4];
+	argc = option_parse_split_string(input, argv, 4);
+	TEST_CHECK(argc == 4);
+	TEST_CHECK(strcmp(argv[0], "Command") == 0);
+	TEST_CHECK(strcmp(argv[1], "arg1") == 0);
+	TEST_CHECK(strcmp(argv[2], "arg2") == 0);
+	TEST_CHECK(strcmp(argv[3], "arg3") == 0);
+}
+
+static void bad_strings(void)
+{
+	int argc;
+	char *argv[4];
+
+	char empty[] = "";
+	argc = option_parse_split_string(empty, argv, 4);
+	TEST_CHECK(argc == 0);
+
+	char blank[] = "     ";
+	argc = option_parse_split_string(blank, argv, 4);
+	TEST_CHECK(argc == 0);
+
+	char middle[] = "   fnord   ";
+	argc = option_parse_split_string(middle, argv, 4);
+	TEST_CHECK(argc == 1);
+	TEST_CHECK(strcmp(argv[0], "fnord") == 0);
+
+	char single[] = "single";
+	argc = option_parse_split_string(single, argv, 4);
+	TEST_CHECK(argc == 1);
+	TEST_CHECK(strcmp(argv[0], "single") == 0);
+}
+
+
 TEST_LIST = {
 	{"simple", simple_args},
+	{"split string", split_string},
+	{"bad strings", bad_strings},
 	{NULL, NULL},
 };

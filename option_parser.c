@@ -113,3 +113,31 @@ int option_parse(int nargs, const char *args[], struct option_entry *options)
 	}
 	return 0;
 }
+
+static bool is_whitespace(char ch)
+{
+	return (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r');
+}
+
+int option_parse_split_string(char *line, char **output, int max_items)
+{
+	char *pos = line;
+	int nitems = 0;
+
+	while (pos && *pos && nitems < max_items) {
+		while (is_whitespace(*pos) && *pos)
+			pos++;
+
+		if (!*pos)
+			break;
+		output[nitems++] = pos;
+		while (!is_whitespace(*pos) && *pos)
+			pos++;
+		if (!*pos)
+			break;
+		*pos = '\0';
+		pos++;
+	}
+
+	return nitems;
+}
