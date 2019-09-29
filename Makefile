@@ -13,4 +13,4 @@ option_parser_test: option_parser.o option_parser_test.o
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 clean:
-	rm -f *.o option_parser_test demo_app
+	rm -f *.o option_parser_test demo_app test-results.xml
