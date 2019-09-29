@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "option_parser.h"
 
-int main(int argc, const char *argv[])
+int main(int argc, char *argv[])
 {
 	char *file = NULL;
 	int64_t val = 5;

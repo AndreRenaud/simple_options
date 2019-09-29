@@ -25,7 +25,7 @@ struct option_entry {
 	bool present;
 };
 
-int option_parse(int nargs, const char *args[], struct option_entry *options);
+int option_parse(int nargs, char **args, struct option_entry *options);
 int option_parse_split_string(char *line, char **output, int max_items);
 
 #endif

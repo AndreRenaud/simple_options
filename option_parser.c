@@ -34,7 +34,7 @@ static bool needs_param(struct option_entry *o)
 	return o->flags & (OPTION_FLAG_bool | OPTION_FLAG_int | OPTION_FLAG_string);
 }
 
-static void set_param(struct option_entry *o, const char *val)
+static void set_param(struct option_entry *o, char *val)
 {
 	if (o->flags & OPTION_FLAG_bool) {
 		*o->boolean = strcasecmp(val, "true") == 0 ||
@@ -49,20 +49,20 @@ static void set_param(struct option_entry *o, const char *val)
 	}
 }
 
-int option_parse(int nargs, const char *args[], struct option_entry *options)
+int option_parse(int nargs, char **args, struct option_entry *options)
 {
 	if (!args || !nargs || !options)
 		return -1;
 	for (struct option_entry *o = options; o->long_opt || o->short_opt; o++)
 		o->present = false;
 	for (int i = 1; i < nargs; i++) {
-		const char *arg = args[i];
+		char *arg = args[i];
 		if (!arg)
 			continue;
 		if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0)
 			return dump_usage(args[0], options);
 		if (arg[0] == '-' && arg[1] == '-') {
- 			const char *end = strchr(arg, '=');
+ 			char *end = strchr(arg, '=');
  			int len = strlen(&arg[2]);
  			if (end)
  				len = end - arg - 2;
