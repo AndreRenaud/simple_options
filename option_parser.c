@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -82,49 +81,47 @@ int opt_parse(int nargs, char **args, struct option_entry *options)
 		if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0)
 			return -1;
 		if (arg[0] == '-' && arg[1] == '-') {
- 			char *end = strchr(arg, '=');
- 			int len = strlen(&arg[2]);
- 			if (end)
- 				len = end - arg - 2;
- 			bool found = false;
-	 		for (OPT_ITERATE(o, options)) {
-	 			if (strncmp(o->long_opt, &arg[2], len) == 0) {
-	 				o->present = true;
-	 				if (needs_param(o)) {
-	 					if (end)
-	 						set_param(o, end + 1);
-	 					else if (i < nargs - 1)
-	 						set_param(o, args[++i]);
-	 					else
-	 						return -1;
-	 				}
-	 				found = true;
-	 				break;
-	 			}
-	 		}
-	 		if (!found) {
-	 			fprintf(stderr, "Invalid option \"%s\"\n", &arg[2]);
-	 			return -1;
-	 		}
+			char *end = strchr(arg, '=');
+			int len = strlen(&arg[2]);
+			if (end)
+				len = end - arg - 2;
+			bool found = false;
+			for (OPT_ITERATE(o, options)) {
+				if (strncmp(o->long_opt, &arg[2], len) == 0) {
+					o->present = true;
+					if (needs_param(o)) {
+						if (end)
+							set_param(o, end + 1);
+						else if (i < nargs - 1)
+							set_param(o, args[++i]);
+						else
+							return -1;
+					}
+					found = true;
+					break;
+				}
+			}
+			if (!found)
+				return -1;
 		} else if (arg[0] == '-') {
 			bool found = false;
-	 		for (OPT_ITERATE(o, options)) {
-	 			if (o->short_opt == arg[1]) {
-	 				o->present = true;
-	 				found = true;
-	 				if (needs_param(o)) {
-	 					if (arg[2] == '=')
-	 						set_param(o, &arg[3]);
-	 					else if (i < nargs - 1)
-	 						set_param(o, args[++i]);
-	 					else
-	 						return -1;
-	 				}
-	 				break;
-	 			}
-	 		}
-	 		if (!found)
-	 			return -1;
+			for (OPT_ITERATE(o, options)) {
+				if (o->short_opt == arg[1]) {
+					o->present = true;
+					found = true;
+					if (needs_param(o)) {
+						if (arg[2] == '=')
+							set_param(o, &arg[3]);
+						else if (i < nargs - 1)
+							set_param(o, args[++i]);
+						else
+							return -1;
+					}
+					break;
+				}
+			}
+			if (!found)
+				return -1;
 		} else {
 			// TODO: Deal with non-option parameters
 			return -1;

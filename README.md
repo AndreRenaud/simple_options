@@ -11,7 +11,12 @@ It supports both single-character short, and multi-character long style
 arguments, ie: `-f filename` or `--file filename`
 
 It also provides some utility functions for automatically breaking down a
-single
+single.
+
+It works with standard argc/argv values from main, but does not assume
+any stdio access. It makes no stdio printf/fprintf calls, and as such is
+suitable for embedded systems with different command interfaces, or when
+interacting with a non stdin/stdout/stderr system.
 
 ## Example Usage
 ```c
