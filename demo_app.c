@@ -24,6 +24,6 @@ int main(int argc, char *const argv[])
 		return -1;
 	}
 	printf("file: %s\n", file);
-	printf("number: %lld\n", val);
+	printf("number: %lld\n", (long long int)val);
 	return 0;
 }
