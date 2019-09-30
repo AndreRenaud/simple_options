@@ -17,6 +17,7 @@ int main(int argc, char *argv[])
 	struct option_entry entries[] = {
 		{"file", 'f', "File to load", OPTION_FLAG_string, .string = &file},
 		{"number", 'n', "Number", OPTION_FLAG_int, .integer = &val},
+		{"desc", 0, NULL, OPTION_FLAG_required},
 		{NULL, 0},
 	};
 	if (opt_parse(argc, argv, entries) < 0) {

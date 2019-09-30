@@ -6,6 +6,11 @@
 
 #define OPT_ITERATE(opt, options) struct option_entry *opt = options; opt && (opt->long_opt || opt->short_opt); opt++
 
+static bool needs_param(const struct option_entry *o)
+{
+	return o->flags & (OPTION_FLAG_bool | OPTION_FLAG_int | OPTION_FLAG_string);
+}
+
 void opt_parse_usage(int (*print_func)(const char *string, ...), const char *prog_name, const struct option_entry *options)
 {
 	print_func("Usage: %s [options]\n", prog_name);
@@ -16,8 +21,7 @@ void opt_parse_usage(int (*print_func)(const char *string, ...), const char *pro
 			print_func("-%c", o->short_opt);
 		if (o->long_opt)
 			print_func("%s--%s", o->short_opt ? ", " : "    ", o->long_opt);
-		if (o->description)
-			print_func("\t%s", o->description);
+		print_func("\t%s", o->description ? o->description : "");
 		if (o->flags & OPTION_FLAG_int)
 			print_func(" [default: %lld]", *o->integer);
 		if (o->flags & OPTION_FLAG_string && *o->string)
@@ -25,14 +29,9 @@ void opt_parse_usage(int (*print_func)(const char *string, ...), const char *pro
 		if (o->flags & OPTION_FLAG_bool)
 			print_func(" [default: %s]", *o->boolean ? "true" : "false");
 		if (o->flags & OPTION_FLAG_required)
-			print_func(" [required]");
+			print_func("%s[required]", (needs_param(o) || o->description) ? " " : "");
 		print_func("\n");
 	}
-}
-
-static bool needs_param(const struct option_entry *o)
-{
-	return o->flags & (OPTION_FLAG_bool | OPTION_FLAG_int | OPTION_FLAG_string);
 }
 
 static void set_param(struct option_entry *o, const char *val)
