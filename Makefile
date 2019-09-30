@@ -1,3 +1,5 @@
+CFLAGS=-g -pipe -O3 -Wall -Werror -pedantic --std=c1x
+
 default: test demo_app
 
 test: option_parser_test

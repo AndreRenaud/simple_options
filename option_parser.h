@@ -31,7 +31,7 @@ struct option_entry {
 	union {
 		int64_t *integer; // Pointers to where the option values should be stored
 		bool *boolean;
-		char **string;
+		const char **string;
 	};
 	bool present; // Set after opt_parse to indicate if the option was supplied
 };
@@ -43,7 +43,7 @@ struct option_entry {
  * @param options The options to check for
  * @return < 0 on failure, >= 0 on success
  */
-int opt_parse(int nargs, char **args, struct option_entry *options);
+int opt_parse(int nargs, char *const *args, struct option_entry *options);
 
 /**
  * Display the help/usage for a given list of options
@@ -56,7 +56,7 @@ void opt_parse_usage(int (*print_func)(const char *string, ...), const char *pro
 /**
  * Splits a single string into the white space separated items
  * @param line original single string of input (note: This will have nul bytes
- *.       inserted to break up the elements
+ *.       inserted to break up the elements)
  * @param output Array to store the pointers to the individual words in
  * @param max_items The maximum number of items to store in 'output'
  * @return < 0 on failure, numnber of items stored in 'output' on success

@@ -3,7 +3,7 @@
 
 static void simple_args(void)
 {
-	char *file = NULL;
+	const char *file = NULL;
 	int64_t val = 5;
 	bool flag = false;
 	struct option_entry entries[] = {
@@ -63,7 +63,7 @@ static void bad_strings(void)
 
 static void combined(void)
 {
-	char *file = NULL;
+	const char *file = NULL;
 	int64_t val = 5;
 	bool flag = false;
 	struct option_entry entries[] = {

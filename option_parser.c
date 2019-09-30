@@ -34,7 +34,7 @@ static bool needs_param(const struct option_entry *o)
 	return o->flags & (OPTION_FLAG_bool | OPTION_FLAG_int | OPTION_FLAG_string);
 }
 
-static void set_param(struct option_entry *o, char *val)
+static void set_param(struct option_entry *o, const char *val)
 {
 	if (o->flags & OPTION_FLAG_bool) {
 		*o->boolean = strcasecmp(val, "true") == 0 ||
@@ -66,7 +66,7 @@ static bool options_valid(const struct option_entry *options)
 	return true;
 }
 
-int opt_parse(int nargs, char **args, struct option_entry *options)
+int opt_parse(int nargs, char *const*args, struct option_entry *options)
 {
 	if (!args || !nargs)
 		return -1;
@@ -75,7 +75,7 @@ int opt_parse(int nargs, char **args, struct option_entry *options)
 	for (OPT_ITERATE(o, options))
 		o->present = false;
 	for (int i = 1; i < nargs; i++) {
-		char *arg = args[i];
+		const char *arg = args[i];
 		if (!arg)
 			continue;
 		if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0)
