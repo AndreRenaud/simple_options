@@ -29,7 +29,7 @@ int main(int argc, char *argv[]) {
 		{NULL, 0},
 	};
 	if (opt_parse(argc, argv, entries) < 0) {
-		opt_parse_usage(eprintf, argv[0], entries);
+		opt_parse_usage(printf, argv[0], entries);
 		return -1;
 	}
 	if (opt_parse_is_present('f', entries)
