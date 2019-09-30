@@ -96,11 +96,38 @@ static void required(void)
 	TEST_CHECK(opt_parse(2, new_args, entries) >= 0);
 }
 
+static void extra_params(void)
+{
+	int extra;
+	const char *foo = NULL;
+	struct option_entry entries[] = {
+		{"foo", 'f', NULL, OPTION_FLAG_string, .string = &foo},
+		{NULL},
+	};
+
+	char *args[] = {"prorgram", "extra"};
+	extra = opt_parse(2, args, entries);
+	TEST_CHECK(extra == 1);
+	TEST_CHECK(strcmp(args[extra], "extra") == 0);
+
+	char *args2[] = {"program", "extra", "-f", "foo"};
+	extra = opt_parse(4, args2, entries);
+	TEST_CHECK(extra == 3);
+	TEST_CHECK(strcmp(args2[extra], "extra") == 0);
+
+	char *args3[] = {"program", "extra1", "extra2", "extra3", "-f", "foo", "extra4"};
+	extra = opt_parse(7, args3, entries);
+	TEST_CHECK(extra == 3);
+	TEST_CHECK(strcmp(args3[extra], "extra1") == 0);
+
+}
+
 TEST_LIST = {
 	{"simple", simple_args},
 	{"split string", split_string},
 	{"bad strings", bad_strings},
 	{"combined split & parse", combined},
 	{"required params", required},
+	{"extra params", extra_params},
 	{NULL, NULL},
 };

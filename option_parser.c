@@ -61,22 +61,24 @@ static bool options_valid(const struct option_entry *options)
 			((o->flags & OPTION_FLAG_int) && (o->flags & OPTION_FLAG_string)))
 			return false;
 		// Option flags must have an area to store the data
+		// Assume that the union of pointers will all overlap
 		if (needs_param(o) && !o->integer)
 			return false;
 	}
 	return true;
 }
 
-int opt_parse(int nargs, char *const*args, struct option_entry *options)
+int opt_parse(int nargs, char **args, struct option_entry *options)
 {
+	int swap_pos = nargs - 1;
 	if (!args || !nargs)
 		return -1;
 	if (!options_valid(options))
 		return -1;
 	for (OPT_ITERATE(o, options))
 		o->present = false;
-	for (int i = 1; i < nargs; i++) {
-		const char *arg = args[i];
+	for (int i = 1; i <= swap_pos; i++) {
+		char *arg = args[i];
 		if (!arg)
 			continue;
 		if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0)
@@ -113,8 +115,9 @@ int opt_parse(int nargs, char *const*args, struct option_entry *options)
 					if (needs_param(o)) {
 						if (arg[2] == '=')
 							set_param(o, &arg[3]);
-						else if (i < nargs - 1)
+						else if (i < nargs - 1) {
 							set_param(o, args[++i]);
+						}
 						else
 							return -1;
 					}
@@ -124,8 +127,15 @@ int opt_parse(int nargs, char *const*args, struct option_entry *options)
 			if (!found)
 				return -1;
 		} else {
-			// TODO: Deal with non-option parameters
-			return -1;
+			// This is a non-option argument. Just move it to the end of the arg list
+			for (int j = i; j < nargs - 1; j++) {
+				char *tmp = args[j + 1];
+				args[j + 1] = args[j];
+				args[j] = tmp;
+			}
+			args[nargs - 1] = arg;
+			swap_pos--;
+			i--; // We have to re-process this position again, since we've just swapped it
 		}
 	}
 
@@ -133,7 +143,7 @@ int opt_parse(int nargs, char *const*args, struct option_entry *options)
 		if ((o->flags & OPTION_FLAG_required) && !o->present)
 			return -1;
 	}
-	return 0;
+	return swap_pos + 1;
 }
 
 bool opt_parse_present(char short_opt, const struct option_entry *options)

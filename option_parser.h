@@ -42,8 +42,11 @@ struct option_entry {
  * @param args a list of strings to parse
  * @param options The options to check for
  * @return < 0 on failure, >= 0 on success
+ *    The args may be rearranged to put non-option arguments at the end of the list.
+ *.   The return value will point to the beginning of the non-option arguments, or == nargs - 1
+ *.   if there are no non-option arguments
  */
-int opt_parse(int nargs, char *const *args, struct option_entry *options);
+int opt_parse(int nargs, char **args, struct option_entry *options);
 
 /**
  * Display the help/usage for a given list of options
