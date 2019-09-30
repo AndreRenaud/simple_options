@@ -20,11 +20,15 @@ int main(int argc, char *argv[])
 		{"desc", 0, NULL, OPTION_FLAG_required},
 		{NULL, 0},
 	};
-	if (opt_parse(argc, argv, entries) < 0) {
+	int extra_args = opt_parse(argc, argv, entries);
+	if (extra_args < 0) {
 		opt_parse_usage(eprintf, argv[0], entries);
 		return -1;
 	}
 	printf("file: %s\n", file);
 	printf("number: %lld\n", (long long int)val);
+	for (int i = extra_args; i < argc; i++) {
+		printf("Extra arg %d: %s\n", i, argv[i]);
+	}
 	return 0;
 }
