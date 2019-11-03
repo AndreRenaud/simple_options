@@ -14,7 +14,7 @@ jobs:
           command: make
       - run:
           name: Test
-          command: valgrind --leak-check=full --error-exitcode=1 ./option_parser_test --xml-output=test-results.xml
+          command: valgrind --leak-check=full --error-exitcode=1 ./simple_options_test --xml-output=test-results.xml
           no_output_time: 10s
       - store_test_results:
           path: .
