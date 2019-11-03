@@ -119,7 +119,22 @@ static void extra_params(void)
 	extra = opt_parse(7, args3, entries);
 	TEST_CHECK(extra == 3);
 	TEST_CHECK(strcmp(args3[extra], "extra1") == 0);
+}
 
+static void equals_values(void)
+{
+	const char *foo = NULL;
+	const char *fnord = NULL;
+	struct option_entry entries[] = {
+		{"foo", 'f', NULL, OPTION_FLAG_string, .string = &foo},
+		{"fnord", 'n', NULL, OPTION_FLAG_string, .string = &fnord},
+		{NULL},
+	};
+
+	char *args[] = {"program", "-f=wibble", "--fnord=blah"};
+	TEST_CHECK(opt_parse(3, args, entries) >= 0);
+	TEST_CHECK(strcmp(fnord, "blah") == 0);
+	TEST_CHECK(strcmp(foo, "wibble") == 0);
 }
 
 TEST_LIST = {
@@ -129,5 +144,6 @@ TEST_LIST = {
 	{"combined split & parse", combined},
 	{"required params", required},
 	{"extra params", extra_params},
+	{"equals values", equals_values},
 	{NULL, NULL},
 };
