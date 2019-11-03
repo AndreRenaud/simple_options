@@ -1,5 +1,5 @@
 #include "acutest.h"
-#include "option_parser.h"
+#include "simple_options.h"
 
 static void simple_args(void)
 {

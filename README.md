@@ -1,7 +1,7 @@
-# Option Parser
+# Simple Options
 Build: [![CircleCI](https://circleci.com/gh/AndreRenaud/option_parser.svg?style=svg)](https://circleci.com/gh/AndreRenaud/option_parser)
 
-Option Parser is a minimal command line arguments parsing library designed
+Simple Options is a minimal command line arguments parsing library designed
 to provide minimal argument parsing in a single function call - no need
 to iterate over the arguments/getopt.
 It is designed for simple command line utilities (or in-built CLI-style
@@ -23,7 +23,7 @@ interacting with a non stdin/stdout/stderr system.
 ## Example Usage
 ```c
 #include <stdio.h>
-#include "option_parser.h"
+#include "simple_options.h"
 
 int main(int argc, const char *argv[]) {
 	const char *file = NULL;

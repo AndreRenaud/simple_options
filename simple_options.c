@@ -2,7 +2,7 @@
 #include <string.h>
 #include <strings.h>
 
-#include "option_parser.h"
+#include "simple_options.h"
 
 #define OPT_ITERATE(opt, options) struct option_entry *opt = options; opt && (opt->long_opt || opt->short_opt); opt++
 

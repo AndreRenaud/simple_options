@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdarg.h>
-#include "option_parser.h"
+#include "simple_options.h"
 
 static int eprintf(const char *str, ...) {
 	va_list ap;

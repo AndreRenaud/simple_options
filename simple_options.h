@@ -1,13 +1,13 @@
 /**
  * @author Andre Renaud <andre@ignavus.net>
- * @description Command line option parsing library
+ * @description Simple command line option parsing library
  * Provides ability to create simple unix-style command line
  * flags parsing functions with minimal code
  * Only external requirements: strcmp, strcasecmp
  */
 
-#ifndef OPTION_PARSER_H
-#define OPTION_PARSER_H
+#ifndef SIMPLE_OPTIONS_H
+#define SIMPLE_OPTIONS_H
 
 #include <stdint.h>
 #include <stdbool.h>
@@ -89,4 +89,4 @@ bool opt_parse_present_long(const char *long_opt, const struct option_entry *opt
 }
 #endif
 
-#endif // OPTION_PARSER_H
+#endif // SIMPLE_OPTIONS_H
