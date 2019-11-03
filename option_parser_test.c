@@ -13,7 +13,7 @@ static void simple_args(void)
 		{"missing", 'm', "Missing"},
 		{NULL, 0},
 	};
-	char *args[] = {"program", "-f", "fnord", "--number", "7", "--bool", "on"};
+	const char *args[] = {"program", "-f", "fnord", "--number", "7", "--bool", "on"};
 	TEST_CHECK(opt_parse(7, args, entries) >= 0);
 	TEST_CHECK(file && strcmp(file, "fnord") == 0);
 	TEST_CHECK(val == 7);
@@ -21,6 +21,7 @@ static void simple_args(void)
 	TEST_CHECK(!opt_parse_present('m', entries));
 	TEST_CHECK(opt_parse_present_long("bool", entries));
 	TEST_CHECK(opt_parse_present_long("file", entries));
+	TEST_CHECK(!opt_parse_present_long("unknown", entries));
 	TEST_CHECK(flag == true);
 }
 
@@ -28,7 +29,7 @@ static void split_string(void)
 {
 	char input[] = " Command arg1 \targ2  arg3 missing ";
 	int argc;
-	char *argv[4];
+	const char *argv[4];
 	argc = opt_parse_split_string(input, argv, 4);
 	TEST_CHECK(argc == 4);
 	TEST_CHECK(strcmp(argv[0], "Command") == 0);
@@ -40,7 +41,7 @@ static void split_string(void)
 static void bad_strings(void)
 {
 	int argc;
-	char *argv[4];
+	const char *argv[4];
 
 	char empty[] = "";
 	argc = opt_parse_split_string(empty, argv, 4);
@@ -73,7 +74,7 @@ static void combined(void)
 		{NULL, 0},
 	};
 	char input[] = {"program -f fnord --number 7 --bool on"};
-	char *argv[10];
+	const char *argv[10];
 	int argc;
 	argc = opt_parse_split_string(input, argv, 10);
 	TEST_CHECK(argc == 7);
@@ -90,9 +91,9 @@ static void required(void)
 		{"foo", 'f', NULL, OPTION_FLAG_required},
 		{NULL},
 	};
-	char *args[] = {"program"};
+	const char *args[] = {"program"};
 	TEST_CHECK(opt_parse(1, args, entries) < 0);
-	char *new_args[] = {"program", "-f"};
+	const char *new_args[] = {"program", "-f"};
 	TEST_CHECK(opt_parse(2, new_args, entries) >= 0);
 }
 
@@ -105,17 +106,17 @@ static void extra_params(void)
 		{NULL},
 	};
 
-	char *args[] = {"prorgram", "extra"};
+	const char *args[] = {"prorgram", "extra"};
 	extra = opt_parse(2, args, entries);
 	TEST_CHECK(extra == 1);
 	TEST_CHECK(strcmp(args[extra], "extra") == 0);
 
-	char *args2[] = {"program", "extra", "-f", "foo"};
+	const char *args2[] = {"program", "extra", "-f", "foo"};
 	extra = opt_parse(4, args2, entries);
 	TEST_CHECK(extra == 3);
 	TEST_CHECK(strcmp(args2[extra], "extra") == 0);
 
-	char *args3[] = {"program", "extra1", "extra2", "extra3", "-f", "foo", "extra4"};
+	const char *args3[] = {"program", "extra1", "extra2", "extra3", "-f", "foo", "extra4"};
 	extra = opt_parse(7, args3, entries);
 	TEST_CHECK(extra == 3);
 	TEST_CHECK(strcmp(args3[extra], "extra1") == 0);
@@ -130,8 +131,8 @@ static void equals_values(void)
 		{"fnord", 'n', NULL, OPTION_FLAG_string, .string = &fnord},
 		{NULL},
 	};
+	const char *args[] = {"program", "-f=wibble", "--fnord=blah"};
 
-	char *args[] = {"program", "-f=wibble", "--fnord=blah"};
 	TEST_CHECK(opt_parse(3, args, entries) >= 0);
 	TEST_CHECK(strcmp(fnord, "blah") == 0);
 	TEST_CHECK(strcmp(foo, "wibble") == 0);

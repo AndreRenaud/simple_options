@@ -67,7 +67,7 @@ static bool options_valid(const struct option_entry *options)
 	return true;
 }
 
-int opt_parse(int nargs, char **args, struct option_entry *options)
+int opt_parse(int nargs, const char **args, struct option_entry *options)
 {
 	int swap_pos = nargs - 1;
 	if (!args || !nargs)
@@ -77,7 +77,7 @@ int opt_parse(int nargs, char **args, struct option_entry *options)
 	for (OPT_ITERATE(o, options))
 		o->present = false;
 	for (int i = 1; i <= swap_pos; i++) {
-		char *arg = args[i];
+		const char *arg = args[i];
 		if (!arg)
 			continue;
 		if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0)
@@ -128,7 +128,7 @@ int opt_parse(int nargs, char **args, struct option_entry *options)
 		} else {
 			// This is a non-option argument. Just move it to the end of the arg list
 			for (int j = i; j < nargs - 1; j++) {
-				char *tmp = args[j + 1];
+				const char *tmp = args[j + 1];
 				args[j + 1] = args[j];
 				args[j] = tmp;
 			}
@@ -168,7 +168,7 @@ static bool is_whitespace(char ch)
 	return (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r');
 }
 
-int opt_parse_split_string(char *line, char **output, int max_items)
+int opt_parse_split_string(char *line, const char **output, int max_items)
 {
 	char *pos = line;
 	int nitems = 0;

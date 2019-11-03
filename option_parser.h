@@ -1,4 +1,5 @@
 /**
+ * @author Andre Renaud <andre@ignavus.net>
  * @description Command line option parsing library
  * Provides ability to create simple unix-style command line
  * flags parsing functions with minimal code
@@ -46,7 +47,7 @@ struct option_entry {
  *.   The return value will point to the beginning of the non-option arguments, or == nargs - 1
  *.   if there are no non-option arguments
  */
-int opt_parse(int nargs, char **args, struct option_entry *options);
+int opt_parse(int nargs, const char **args, struct option_entry *options);
 
 /**
  * Display the help/usage for a given list of options
@@ -64,7 +65,7 @@ void opt_parse_usage(int (*print_func)(const char *string, ...), const char *pro
  * @param max_items The maximum number of items to store in 'output'
  * @return < 0 on failure, numnber of items stored in 'output' on success
  */
-int opt_parse_split_string(char *line, char **output, int max_items);
+int opt_parse_split_string(char *line, const char **output, int max_items);
 
 /**
  * Determines if an option was seen after a call to opt_parse

@@ -20,8 +20,11 @@ interacting with a non stdin/stdout/stderr system.
 
 ## Example Usage
 ```c
-int main(int argc, char *argv[]) {
-	char *file = NULL;
+#include <stdio.h>
+#include "option_parser.h"
+
+int main(int argc, const char *argv[]) {
+	const char *file = NULL;
 	int64_t val = 5;
 	struct option_entry entries[] = {
 		{"file", 'f', "File to load", OPTION_FLAG_string, .string = &file},
@@ -32,7 +35,7 @@ int main(int argc, char *argv[]) {
 		opt_parse_usage(printf, argv[0], entries);
 		return -1;
 	}
-	if (opt_parse_is_present('f', entries)
+	if (opt_parse_present('f', entries))
 		printf("file: %s\n", file);
 	printf("number: %lld\n", val);
 	return 0;

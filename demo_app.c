@@ -10,7 +10,7 @@ static int eprintf(const char *str, ...) {
 	return 0;
 }
 
-int main(int argc, char *argv[])
+int main(int argc, const char *argv[])
 {
 	const char *file = NULL;
 	int64_t val = 5;
