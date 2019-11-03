@@ -2,16 +2,18 @@
 Build: [![CircleCI](https://circleci.com/gh/AndreRenaud/option_parser.svg?style=svg)](https://circleci.com/gh/AndreRenaud/option_parser)
 
 Option Parser is a minimal command line arguments parsing library designed
-to provide minimal argument parsing without in a single function call.
-
+to provide minimal argument parsing in a single function call - no need
+to iterate over the arguments/getopt.
 It is designed for simple command line utilities (or in-built CLI-style
 commands) with standard command line behaviour.
 
 It supports both single-character short, and multi-character long style
-arguments, ie: `-f filename` or `--file filename`
+arguments, ie: `-f filename` or `--file filename`.
 
 It also provides some utility functions for automatically breaking down a
-single.
+single line of text into the whitespace separate arguments of a typical
+command line application. A simple --help style feature is built in,
+displaying standard usage behaviour.
 
 It works with standard argc/argv values from main, but does not assume
 any stdio access. It makes no stdio printf/fprintf calls, and as such is
