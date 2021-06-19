@@ -5,16 +5,18 @@ static void simple_args(void)
 {
 	const char *file = NULL;
 	int64_t val = 5;
+	float fval = 1.0;
 	bool flag = false;
 	struct option_entry entries[] = {
 		{"file", 'f', "File to load", OPTION_FLAG_string, .string = &file},
 		{"number", 'n', "Number", OPTION_FLAG_int, .integer = &val},
 		{"bool", 'b', "Boolean", OPTION_FLAG_bool, .boolean = &flag},
+		{"float", 'l', "Floating", OPTION_FLAG_float, .floating = &fval},
 		{"missing", 'm', "Missing"},
 		{NULL, 0},
 	};
-	const char *args[] = {"program", "-f", "fnord", "--number", "7", "--bool", "on"};
-	TEST_CHECK(opt_parse(7, args, entries) >= 0);
+	const char *args[] = {"program", "-f", "fnord", "--number", "7", "--bool", "on", "--float", "0.57"};
+	TEST_CHECK(opt_parse(9, args, entries) >= 0);
 	TEST_CHECK(file && strcmp(file, "fnord") == 0);
 	TEST_CHECK(val == 7);
 	TEST_CHECK(opt_parse_present('f', entries));
@@ -22,6 +24,8 @@ static void simple_args(void)
 	TEST_CHECK(opt_parse_present_long("bool", entries));
 	TEST_CHECK(opt_parse_present_long("file", entries));
 	TEST_CHECK(!opt_parse_present_long("unknown", entries));
+	TEST_CHECK(opt_parse_present_long("float", entries));
+	TEST_CHECK(fval > 0.56999 && fval < 0.57001);
 	TEST_CHECK(flag == true);
 }
 

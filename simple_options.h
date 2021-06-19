@@ -21,7 +21,8 @@ enum {
 	OPTION_FLAG_bool = 1 << 0, // Takes boolean parameter
 	OPTION_FLAG_int = 1 << 1, // Takes integer parameter
 	OPTION_FLAG_string = 1 << 2, // Takes string parameter
-	OPTION_FLAG_required = 1 << 3, // Must be present
+    OPTION_FLAG_float = 1 << 3, // Takes a float parameter
+	OPTION_FLAG_required = 1 << 4, // Must be present
 };
 
 struct option_entry {
@@ -32,6 +33,7 @@ struct option_entry {
 	union {
 		int64_t *integer; // Pointers to where the option values should be stored
 		bool *boolean;
+        float *floating;
 		const char **string;
 	};
 	bool present; // Set after opt_parse to indicate if the option was supplied

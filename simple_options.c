@@ -8,7 +8,7 @@
 
 static bool needs_param(const struct option_entry *o)
 {
-	return o->flags & (OPTION_FLAG_bool | OPTION_FLAG_int | OPTION_FLAG_string);
+	return o->flags & (OPTION_FLAG_bool | OPTION_FLAG_int | OPTION_FLAG_string | OPTION_FLAG_float);
 }
 
 void opt_parse_usage(int (*print_func)(const char *string, ...), const char *prog_name, const struct option_entry *options)
@@ -28,6 +28,8 @@ void opt_parse_usage(int (*print_func)(const char *string, ...), const char *pro
 			print_func(" [default: \"%s\"]", *o->string);
 		if (o->flags & OPTION_FLAG_bool)
 			print_func(" [default: %s]", *o->boolean ? "true" : "false");
+		if (o->flags & OPTION_FLAG_float)
+			print_func("[ default: %f]", *o->floating);
 		if (o->flags & OPTION_FLAG_required)
 			print_func("%s[required]", (needs_param(o) || o->description) ? " " : "");
 		print_func("\n");
@@ -46,6 +48,8 @@ static void set_param(struct option_entry *o, const char *val)
 		*o->integer = strtoll(val, NULL, 0);
 	} else if (o->flags & OPTION_FLAG_string) {
 		*o->string = val;
+	} else if (o->flags & OPTION_FLAG_float) {
+		*o->floating = atof(val);
 	}
 }
 
