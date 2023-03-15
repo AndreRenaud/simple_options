@@ -45,3 +45,23 @@ int main(int argc, const char *argv[]) {
 	return 0;
 }
 ```
+
+
+```sh
+% ./demo_app
+Usage: ./demo_app [options]
+	-h, --help	Display this help message
+	-f, --file	File to load
+	-n, --number	Number [default: 5]
+	    --desc	[required]
+% ./demo_app -f foo
+Usage: ./demo_app [options]
+	-h, --help	Display this help message
+	-f, --file	File to load [default: "foo"]
+	-n, --number	Number [default: 5]
+	    --desc	[required]
+% ./demo_app -f foo --desc wibble
+file: foo
+number: 5
+Extra arg 4: wibble
+```
