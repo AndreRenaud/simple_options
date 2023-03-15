@@ -1,4 +1,6 @@
 # Simple Options
+Build: <img src="https://github.com/AndreRenaud/simple_options/actions/workflows/build_and_test.yml/badge.svg" alt="Workflow"/>
+
 <img src="https://raw.githubusercontent.com/AndreRenaud/simple_options/master/logo.png" alt="Simple Options Logo" width="480"/>
 
 Simple Options is a minimal command line arguments parsing library designed
