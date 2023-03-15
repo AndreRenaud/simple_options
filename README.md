@@ -1,5 +1,6 @@
 # Simple Options
-Build: [![CircleCI](https://circleci.com/gh/AndreRenaud/simple_options.svg?style=svg)](https://circleci.com/gh/AndreRenaud/simple_options)
+Build: <img src="https://github.com/AndreRenaud/simple_options/actions/workflows/build_and_test.yml/badge.svg" alt="Workflow"/>
+
 <img src="https://raw.githubusercontent.com/AndreRenaud/simple_options/master/logo.png" alt="Simple Options Logo" width="480"/>
 
 Simple Options is a minimal command line arguments parsing library designed
