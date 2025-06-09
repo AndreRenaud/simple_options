@@ -22,14 +22,14 @@ void opt_parse_usage(int (*print_func)(const char *string, ...), const char *pro
 		if (o->long_opt)
 			print_func("%s--%s", o->short_opt ? ", " : "    ", o->long_opt);
 		print_func("\t%s", o->description ? o->description : "");
-		if (o->flags & OPTION_FLAG_int)
+		if (o->flags & OPTION_FLAG_int && *o->integer)
 			print_func(" [default: %lld]", *o->integer);
 		if (o->flags & OPTION_FLAG_string && *o->string)
 			print_func(" [default: \"%s\"]", *o->string);
-		if (o->flags & OPTION_FLAG_bool)
+		if (o->flags & OPTION_FLAG_bool && *o->boolean)
 			print_func(" [default: %s]", *o->boolean ? "true" : "false");
-		if (o->flags & OPTION_FLAG_float)
-			print_func("[ default: %f]", *o->floating);
+		if (o->flags & OPTION_FLAG_float && *o->floating)
+			print_func(" [default: %f]", *o->floating);
 		if (o->flags & OPTION_FLAG_required)
 			print_func("%s[required]", (needs_param(o) || o->description) ? " " : "");
 		print_func("\n");
@@ -93,7 +93,7 @@ int opt_parse(int nargs, const char **args, struct option_entry *options)
 				len = end - arg - 2;
 			bool found = false;
 			for (OPT_ITERATE(o, options)) {
-				if (strncmp(o->long_opt, &arg[2], len) == 0) {
+				if (strncmp(o->long_opt, &arg[2], len) == 0 && len == strlen(o->long_opt)) {
 					o->present = true;
 					if (needs_param(o)) {
 						if (end)

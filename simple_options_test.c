@@ -4,10 +4,12 @@
 static void simple_args(void)
 {
 	const char *file = NULL;
+	const char *filename = NULL;
 	int64_t val = 5;
 	float fval = 1.0;
 	bool flag = false;
 	struct option_entry entries[] = {
+		{"filename", 'z', "Alternative filename", OPTION_FLAG_string, .string = &filename},
 		{"file", 'f', "File to load", OPTION_FLAG_string, .string = &file},
 		{"number", 'n', "Number", OPTION_FLAG_int, .integer = &val},
 		{"bool", 'b', "Boolean", OPTION_FLAG_bool, .boolean = &flag},
@@ -15,9 +17,10 @@ static void simple_args(void)
 		{"missing", 'm', "Missing"},
 		{NULL, 0},
 	};
-	const char *args[] = {"program", "-f", "fnord", "--number", "7", "--bool", "on", "--float", "0.57"};
-	TEST_CHECK(opt_parse(9, args, entries) >= 0);
+	const char *args[] = {"program", "--file", "fnord", "--number", "7", "--bool", "on", "--float", "0.57", "--filename", "wibble"};
+	TEST_CHECK(opt_parse(11, args, entries) >= 0);
 	TEST_CHECK(file && strcmp(file, "fnord") == 0);
+	TEST_CHECK(filename && strcmp(filename, "wibble") == 0);
 	TEST_CHECK(val == 7);
 	TEST_CHECK(opt_parse_present('f', entries));
 	TEST_CHECK(!opt_parse_present('m', entries));
