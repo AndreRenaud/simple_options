@@ -25,8 +25,8 @@ int main(int argc, const char *argv[])
 		opt_parse_usage(eprintf, argv[0], entries);
 		return -1;
 	}
-	printf("file: %s\n", file);
-	printf("number: %lld\n", (long long int)val);
+	printf("file: %s (%spresent)\n", file, opt_parse_present('f', entries) ? "" : "not ");
+	printf("number: %lld (%spresent)\n", (long long int)val, opt_parse_present('n', entries) ? "" : "not ");
 	for (int i = extra_args; i < argc; i++) {
 		printf("Extra arg %d: %s\n", i, argv[i]);
 	}

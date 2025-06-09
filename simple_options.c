@@ -118,6 +118,8 @@ int opt_parse(int nargs, const char **args, struct option_entry *options)
 					if (needs_param(o)) {
 						if (arg[2] == '=')
 							set_param(o, &arg[3]);
+						else if (arg[2] != '\0')
+							set_param(o, &arg[2]);
 						else if (i < nargs - 1) {
 							set_param(o, args[++i]);
 						}

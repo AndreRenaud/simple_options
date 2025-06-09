@@ -80,11 +80,11 @@ static void combined(void)
 		{"bool", 'b', "Boolean", OPTION_FLAG_bool, .boolean = &flag},
 		{NULL, 0},
 	};
-	char input[] = {"program -f fnord --number 7 --bool on"};
+	char input[] = {"program -f fnord --number=4 --bool=on -n7"};
 	const char *argv[10];
 	int argc;
 	argc = opt_parse_split_string(input, argv, 10);
-	TEST_CHECK(argc == 7);
+	TEST_CHECK(argc == 6);
 	TEST_CHECK(opt_parse(argc, argv, entries) >= 0);
 	TEST_CHECK(file && strcmp(file, "fnord") == 0);
 	TEST_CHECK(val == 7);
